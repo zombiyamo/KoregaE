@@ -12,13 +12,13 @@ jobs:
 
     steps:
       - name: コードのチェックアウト
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: JDK 11のセットアップ
-        uses: actions/setup-java@v2
+      - name: JDK 17のセットアップ
+        uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: '11'
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Gradleの実行権限付与
         run: chmod +x ./gradlew
