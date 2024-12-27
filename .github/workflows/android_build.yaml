@@ -26,7 +26,7 @@ jobs:
       - name: デバッグビルドの実行
         run: ./gradlew assembleDebug
 
-      - name: キャンバス テストの実行
+      - name: テストの実行
         run: ./gradlew testDebugUnitTest
 
       - name: ビルド成果物のアップロード
