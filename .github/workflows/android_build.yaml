@@ -1,0 +1,34 @@
+name: AndroidBuild
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: コードのチェックアウト
+        uses: actions/checkout@v2
+
+      - name: JDK 11のセットアップ
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Gradleの実行権限付与
+        run: chmod +x ./gradlew
+
+      - name: デバッグビルドの実行
+        run: ./gradlew assembleDebug
+
+      - name: ビルド成果物のアップロード
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+
