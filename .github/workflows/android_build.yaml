@@ -14,6 +14,11 @@ jobs:
       - name: コードのチェックアウト
         uses: actions/checkout@v3
 
+      - name: Set up secrets
+        run: |
+          echo "consumerKey=${{ secrets.CONSUMER_KEY }}" >> local.properties
+          echo "consumerSecret=${{ secrets.CONSUMER_SECRET }}" >> local.properties
+
       - name: JDK 17のセットアップ
         uses: actions/setup-java@v3
         with:
