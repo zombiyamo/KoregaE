@@ -1,7 +1,7 @@
 package com.example.koregae.di
 
 import com.example.koregae.BuildConfig
-import com.example.koregae.data.remote.api.OAuthService
+import com.example.koregae.data.remote.api.*
 import com.example.koregae.data.remote.model.OAuthConfig
 import org.koin.dsl.module
 
@@ -14,5 +14,18 @@ val NetworkModule = module {
             consumerSecret = BuildConfig.CONSUMER_SECRET,
         )
     }
-    single { OAuthService(get()) }
+
+    single { HatenaApi() }
+
+    factory { OAuthServiceFactory() }
+
+    single {
+        val config: OAuthConfig = get()
+        val api: HatenaApi = get()
+        get<OAuthServiceFactory>().create(config, api)
+    }
+
+    factory<IOAuthService> {
+        OAuthService(get())
+    }
 }

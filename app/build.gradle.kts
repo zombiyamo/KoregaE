@@ -88,13 +88,26 @@ dependencies {
     // Lifecycle & ViewModel
     implementation(libs.lifecycle.viewmodel.compose)
 
-    // テスト関連
-    implementation(libs.androidx.espresso.core)
-    testImplementation(libs.junit)
+    // JUnit5テスト関連
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter.params)
+
+    // AndroidX Test - Core library
+    testImplementation(libs.androidx.core.testing)
+
+    // Kotlin Coroutines Test library
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // Android Instrumentation Tests
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

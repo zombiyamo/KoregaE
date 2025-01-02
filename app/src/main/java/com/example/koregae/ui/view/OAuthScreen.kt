@@ -86,9 +86,11 @@ fun OAuthScreen(oauthViewModel: OAuthViewModel) {
                         oauthViewModel.completeOAuthFlow(
                             pinCode,
                             onSuccess = { accessToken ->
-                                oauthViewModel.fetchUserData(accessToken) { data ->
+                                oauthViewModel.fetchUserData(accessToken, onSuccess = { data ->
                                     Toast.makeText(context, data, Toast.LENGTH_LONG).show()
-                                }
+                                }, onError = { error ->
+                                    errorMessage = error.message ?: "Failed to fetch user data"
+                                })
                                 authSuccessMessage = "Authentication Successful!"
                             },
                             onError = { error ->
