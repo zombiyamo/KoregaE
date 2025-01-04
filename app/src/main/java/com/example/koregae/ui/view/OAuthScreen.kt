@@ -1,7 +1,5 @@
 package com.example.koregae.ui.view
 
-import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,10 +26,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.koregae.ui.viewModel.OAuthViewModel
 import com.example.koregae.ui.viewModel.OAuthViewModel.OAuthUiState
+import com.example.koregae.utils.CustomTabsLauncher
+import org.koin.androidx.compose.get
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OAuthScreen(oauthViewModel: OAuthViewModel) {
+fun OAuthScreen(
+    oauthViewModel: OAuthViewModel = koinViewModel(),
+    customTabsLauncher: CustomTabsLauncher = get()
+) {
     val context = LocalContext.current
     val uiState by oauthViewModel.uiState.collectAsState()
 
@@ -78,8 +82,7 @@ fun OAuthScreen(oauthViewModel: OAuthViewModel) {
                     // URLをブラウザで開くボタン
                     Button(
                         onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(authUrl))
-                            context.startActivity(intent)
+                            customTabsLauncher.launchUrl(authUrl)
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {

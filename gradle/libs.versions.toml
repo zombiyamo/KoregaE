@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.3"
+browser = "1.8.0"
 coreTesting = "2.2.0"
 datastorePreferences = "1.1.1"
 junitJupiterApi = "5.10.1"
@@ -24,6 +25,7 @@ koinAndroid = "3.2.3"
 ktor = "2.3.5"
 
 [libraries]
+androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }

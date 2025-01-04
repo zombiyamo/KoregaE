@@ -14,9 +14,9 @@ import com.example.koregae.data.remote.api.OAuthServiceFactory
 import com.example.koregae.data.remote.model.OAuthConfig
 import org.koin.dsl.module
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "oauth_token")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "koregae_datastore")
 
-val NetworkModule = module {
+val networkModule = module {
     single {
         OAuthConfig(
             authorizeUrl = "https://www.hatena.ne.jp/touch/oauth/authorize",

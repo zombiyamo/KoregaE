@@ -11,12 +11,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.koregae.data.local.UserInfoManager
 import com.example.koregae.ui.view.OAuthScreen
 import com.example.koregae.ui.view.RssScreen
-import com.example.koregae.ui.view.WebViewScreen
 import com.example.koregae.ui.viewModel.OAuthViewModel
 import com.example.koregae.ui.viewModel.OAuthViewModel.OAuthUiState
 import com.example.koregae.ui.viewModel.RssViewModel
+import com.example.koregae.utils.CustomTabsLauncher
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
     private val oauthViewModel: OAuthViewModel by viewModel()
@@ -25,15 +26,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val customTabsLauncher: CustomTabsLauncher by inject { parametersOf(this) }
+
         setContent {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "rss") {
                 composable("rss") {
-                    RssScreen(viewModel = rssViewModel, navController = navController)
-                }
-                composable("webview/{url}") { backStackEntry ->
-                    val url = backStackEntry.arguments?.getString("url") ?: ""
-                    WebViewScreen(url = url)
+                    RssScreen(rssViewModel, customTabsLauncher)
                 }
             }
 
@@ -47,15 +46,15 @@ class MainActivity : ComponentActivity() {
                 }
 
                 is OAuthUiState.Error -> {
-                    OAuthScreen(oauthViewModel)
+                    OAuthScreen(customTabsLauncher = customTabsLauncher)
                 }
 
                 is OAuthUiState.NoToken -> {
-                    OAuthScreen(oauthViewModel)
+                    OAuthScreen(customTabsLauncher = customTabsLauncher)
                 }
 
                 is OAuthUiState.OAuthFlowStarted -> {
-                    OAuthScreen(oauthViewModel)
+                    OAuthScreen(customTabsLauncher = customTabsLauncher)
                 }
 
                 is OAuthUiState.TokenLoaded -> {
@@ -75,6 +74,7 @@ class MainActivity : ComponentActivity() {
     // アクティビティ起動時にアクセストークンをロードする
     override fun onStart() {
         super.onStart()
+        val oauthViewModel: OAuthViewModel by viewModel()
         oauthViewModel.loadAccessToken()
     }
 }
