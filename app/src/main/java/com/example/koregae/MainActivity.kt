@@ -51,8 +51,6 @@ class MainActivity : ComponentActivity() {
                 }
 
                 is OAuthUiState.NoToken -> {
-                    // トークンがない場合はOAuthフローを開始
-                    oauthViewModel.startOAuthFlow()
                     OAuthScreen(oauthViewModel)
                 }
 

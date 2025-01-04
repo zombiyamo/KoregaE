@@ -66,15 +66,6 @@ fun OAuthScreen(oauthViewModel: OAuthViewModel) {
                 }
 
                 is OAuthUiState.NoToken -> {
-                    // トークンがない場合、OAuthフローを開始
-                    Button(
-                        onClick = {
-                            oauthViewModel.startOAuthFlow()
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Start OAuth Flow")
-                    }
                 }
 
                 is OAuthUiState.OAuthFlowStarted -> {
@@ -96,10 +87,7 @@ fun OAuthScreen(oauthViewModel: OAuthViewModel) {
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
-                }
 
-                is OAuthUiState.TokenLoaded -> {
-                    // トークンがロードされた後、PINコード入力フィールドを表示
                     OutlinedTextField(
                         value = pinCode,
                         onValueChange = { pinCode = it },
@@ -119,6 +107,9 @@ fun OAuthScreen(oauthViewModel: OAuthViewModel) {
                     ) {
                         Text("Submit PIN Code")
                     }
+                }
+
+                is OAuthUiState.TokenLoaded -> {
                 }
 
                 is OAuthUiState.UserDataLoaded -> {

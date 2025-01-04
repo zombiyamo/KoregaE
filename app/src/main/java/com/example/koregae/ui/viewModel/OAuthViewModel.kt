@@ -20,6 +20,7 @@ class OAuthViewModel(
     val uiState: StateFlow<OAuthUiState> = _uiState.asStateFlow()
 
     fun loadAccessToken() {
+        if (_uiState.value is OAuthUiState.OAuthFlowStarted) return
         viewModelScope.launch {
             _uiState.value = OAuthUiState.Loading
             runCatching {
@@ -29,7 +30,7 @@ class OAuthViewModel(
                     _uiState.value = OAuthUiState.TokenLoaded(token)
                     fetchUserData(token)
                 } else {
-                    _uiState.value = OAuthUiState.NoToken
+                    startOAuthFlow()
                 }
             }.onFailure {
                 _uiState.value = OAuthUiState.Error(it)
