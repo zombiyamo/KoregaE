@@ -19,11 +19,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.koregae.ui.viewModel.RssViewModel
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RssScreen(viewModel: RssViewModel) {
+fun RssScreen(viewModel: RssViewModel, navController: NavController) {
     val rssItems by viewModel.rssItems.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val error by viewModel.error.collectAsStateWithLifecycle()
@@ -51,6 +54,11 @@ fun RssScreen(viewModel: RssViewModel) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
+                                    val encodedUrl = URLEncoder.encode(
+                                        item.link,
+                                        StandardCharsets.UTF_8.toString()
+                                    )
+                                    navController.navigate("webview/$encodedUrl")
                                 }
                                 .padding(8.dp)
                         ) {
