@@ -3,13 +3,14 @@ package com.example.koregae.data.local
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.github.scribejava.core.model.OAuth1AccessToken
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 
 class FakeOAuthTokenManager(dataStore: FakeDataStore = FakeDataStore()) :
     OAuthTokenManager(dataStore) {
 
     override suspend fun saveAccessToken(accessToken: OAuth1AccessToken) {
-        // モックのデータを保存
+        delay(100)
     }
 
     override suspend fun getAccessToken(): OAuth1AccessToken? {
