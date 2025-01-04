@@ -1,5 +1,6 @@
 package com.example.koregae.data.remote.api
 
+import com.example.koregae.data.remote.model.UserInfo
 import com.github.scribejava.core.model.OAuth1AccessToken
 import com.github.scribejava.core.model.OAuth1RequestToken
 
@@ -14,26 +15,17 @@ class FakeOAuthService : IOAuthService {
         return OAuth1RequestToken("fakeRequestToken", "fakeRequestTokenSecret")
     }
 
-    override suspend fun getAccessToken(
-        requestToken: OAuth1RequestToken,
-        verifier: String
-    ): OAuth1AccessToken {
+    override suspend fun getAccessToken(verifier: String): OAuth1AccessToken {
         if (shouldThrowException) {
             throw Exception("Failed to get Access Token")
         }
-        return OAuth1AccessToken("fakeAccessToken", "fakeAccessTokenSecret")
+        return OAuth1AccessToken("fakeAccessToken", "fakeAccessTokenSecret", "fakeRawResponse")
     }
 
-    override suspend fun fetchUserData(accessToken: OAuth1AccessToken): String {
+    override suspend fun fetchUserData(accessToken: OAuth1AccessToken): UserInfo {
         if (shouldThrowException) {
             throw Exception("Failed to fetch user data")
         }
-        return """
-            {
-                "id": "fake_user_id",
-                "name": "Fake User",
-                "email": "fakeuser@example.com"
-            }
-        """.trimIndent()
+        return UserInfo("fake_user_id")
     }
 }

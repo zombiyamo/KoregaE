@@ -1,6 +1,6 @@
-package com.example.koregae.ui.viewModel
+package com.example.koregae.di
 
-import kotlinx.coroutines.Dispatchers
+import com.example.koregae.ui.viewModel.OAuthViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -9,7 +9,7 @@ val viewModelModule = module {
         OAuthViewModel(
             oAuthService = get(),
             config = get(),
-            ioDispatcher = Dispatchers.IO
+            tokenManager = get()
         )
     }
 }

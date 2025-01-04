@@ -47,11 +47,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.scribejava.apis)
 
@@ -81,12 +82,21 @@ dependencies {
     implementation(libs.koin.android.compat)
     implementation(libs.koin.androidx.compose)
 
+    // Ktor関連の依存関係
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.logging)
+
     // コルーチン & シリアライズ
     implementation(libs.coroutines.core)
     implementation(libs.serialization.json)
 
     // Lifecycle & ViewModel
     implementation(libs.lifecycle.viewmodel.compose)
+
+    // Jetpack DataStore
+    implementation(libs.androidx.datastore.preferences)
 
     // JUnit5テスト関連
     testImplementation(libs.junit.jupiter.api)

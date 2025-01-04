@@ -29,6 +29,7 @@
                 <data android:scheme="koregae" android:host="callback" />
             </intent-filter>
         </activity>
+        <activity android:name=".RssActivity" />
     </application>
 
 </manifest>
