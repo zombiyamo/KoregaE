@@ -18,7 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,13 +26,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.koregae.RssActivity
 import com.example.koregae.ui.viewModel.OAuthViewModel
 import com.example.koregae.ui.viewModel.OAuthViewModel.OAuthUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OAuthScreen(oauthViewModel: OAuthViewModel, authUrl: String? = null) {
+fun OAuthScreen(oauthViewModel: OAuthViewModel) {
     val context = LocalContext.current
     val uiState by oauthViewModel.uiState.collectAsState()
 
@@ -124,18 +122,9 @@ fun OAuthScreen(oauthViewModel: OAuthViewModel, authUrl: String? = null) {
                 }
 
                 is OAuthUiState.UserDataLoaded -> {
-                    // ユーザー名がロードされた場合、成功メッセージを表示
                     val userName = (uiState as OAuthUiState.UserDataLoaded).userName
                     Toast.makeText(context, "Welcome, $userName!", Toast.LENGTH_LONG).show()
-
-                    // 次の画面へ遷移
-                    LaunchedEffect(userName) {
-                        val intent = Intent(context, RssActivity::class.java)
-                        context.startActivity(intent)
-                    }
                 }
-
-                OAuthUiState.Idle -> TODO()
             }
         }
     }

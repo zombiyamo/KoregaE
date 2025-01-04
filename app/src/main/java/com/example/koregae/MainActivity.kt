@@ -1,19 +1,22 @@
 package com.example.koregae
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import com.example.koregae.data.local.UserInfoManager
 import com.example.koregae.ui.view.OAuthScreen
+import com.example.koregae.ui.view.RssScreen
 import com.example.koregae.ui.viewModel.OAuthViewModel
 import com.example.koregae.ui.viewModel.OAuthViewModel.OAuthUiState
+import com.example.koregae.ui.viewModel.RssViewModel
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
     private val oauthViewModel: OAuthViewModel by viewModel()
+    private val rssViewModel: RssViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,27 +42,19 @@ class MainActivity : ComponentActivity() {
                 }
 
                 is OAuthUiState.OAuthFlowStarted -> {
-                    val authUrl = (uiState as OAuthUiState.OAuthFlowStarted).authUrl
-                    OAuthScreen(oauthViewModel, authUrl)
+                    OAuthScreen(oauthViewModel)
                 }
 
                 is OAuthUiState.TokenLoaded -> {
                     val token = (uiState as OAuthUiState.TokenLoaded).token
-                    // ユーザーデータの取得
                     oauthViewModel.fetchUserData(token)
                 }
 
                 is OAuthUiState.UserDataLoaded -> {
-                    val userName = (uiState as OAuthUiState.UserDataLoaded).userName
-                    // ユーザー名が取得できたら次の画面へ遷移
-                    LaunchedEffect(userName) {
-                        val intent = Intent(this@MainActivity, RssActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
+                    val userInfoManager: UserInfoManager by inject()
+                    rssViewModel.loadRssFeed(userInfoManager)
+                    RssScreen(rssViewModel)
                 }
-
-                OAuthUiState.Idle -> TODO()
             }
         }
     }

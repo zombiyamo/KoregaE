@@ -16,9 +16,7 @@ class OAuthViewModel(
     private val config: OAuthConfig,
     private val tokenManager: OAuthTokenManager
 ) : ViewModel() {
-
-    // UI状態を表現するStateFlow
-    private val _uiState = MutableStateFlow<OAuthUiState>(OAuthUiState.Idle)
+    private val _uiState = MutableStateFlow<OAuthUiState>(OAuthUiState.Loading)
     val uiState: StateFlow<OAuthUiState> = _uiState.asStateFlow()
 
     fun loadAccessToken() {
@@ -86,7 +84,6 @@ class OAuthViewModel(
      * UI状態を表現するsealed class
      */
     sealed class OAuthUiState {
-        data object Idle : OAuthUiState()
         data object Loading : OAuthUiState()
         data object NoToken : OAuthUiState()
         data class TokenLoaded(val token: OAuth1AccessToken) : OAuthUiState()

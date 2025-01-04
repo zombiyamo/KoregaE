@@ -37,9 +37,9 @@ class OAuthViewModelTest {
 
     @Test
     fun `OAuthフローを開始する`() = runTest {
+        oAuthService.shouldThrowException = false
         val expectedToken = "fakeRequestToken"
         val expectedAuthUrl = "https://example.com/authorize?oauth_token=$expectedToken"
-
         config.authorizeUrl = "https://example.com/authorize"
 
 
@@ -54,12 +54,12 @@ class OAuthViewModelTest {
 
     @Test
     fun `OAuthフローを完了する`() = runTest {
+        oAuthService.shouldThrowException = false
         val expectedToken =
             OAuth1AccessToken("fakeAccessToken", "fakeAccessTokenSecret", "fakeRawResponse")
 
 
         viewModel.completeOAuthFlow(pinCode = "1234")
-
 
         val state = viewModel.uiState.first { it is OAuthViewModel.OAuthUiState.TokenLoaded }
         assert(state is OAuthViewModel.OAuthUiState.TokenLoaded)
@@ -72,6 +72,7 @@ class OAuthViewModelTest {
 
     @Test
     fun `ユーザーデータを取得する`() = runTest {
+        oAuthService.shouldThrowException = false
         val expectedUserData = "fake_user_id"
         val accessToken = OAuth1AccessToken("fakeAccessToken", "fakeAccessTokenSecret")
 
