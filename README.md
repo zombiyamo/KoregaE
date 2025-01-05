@@ -70,6 +70,15 @@ app/
     ```
 2. Android Studioでプロジェクトを開きます。
 3. Gradleファイルとプロジェクトを同期します。
+4. 　consumerKeyとconsumerSecretの登録
+以下のページを参照し、consumerKeyとconsumerSecretを取得します。
+https://developer.hatena.ne.jp/ja/documents/auth/apis/oauth/consumer
+
+プロジェクトのルートディレクトリにlocal.propertiesファイルを作成し、以下の内容を追加します。
+```
+consumerKey=YOUR_CONSUMER_KEY
+consumerSecret=YOUR_CONSUMER_SECRET
+```
 
 ## テストの実行
 
