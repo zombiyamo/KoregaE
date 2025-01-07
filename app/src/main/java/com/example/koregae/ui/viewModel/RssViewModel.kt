@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
-class RssViewModel(private val repository: RssRepository) : ViewModel() {
+class RssViewModel(
+    private val repository: RssRepository,
+    private val userInfoManager: UserInfoManager
+) : ViewModel() {
     private val _rssItems = MutableStateFlow<List<RssItem>>(emptyList())
     val rssItems: StateFlow<List<RssItem>> get() = _rssItems
 
@@ -20,7 +23,11 @@ class RssViewModel(private val repository: RssRepository) : ViewModel() {
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> get() = _error
 
-    fun loadRssFeed(userInfoManager: UserInfoManager) {
+    init {
+        loadRssFeed()
+    }
+
+    private fun loadRssFeed() {
         viewModelScope.launch {
             _isLoading.value = true
             try {

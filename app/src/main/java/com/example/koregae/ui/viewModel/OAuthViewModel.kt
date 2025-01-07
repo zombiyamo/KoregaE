@@ -16,13 +16,16 @@ class OAuthViewModel(
     private val config: OAuthConfig,
     private val tokenManager: OAuthTokenManager
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<OAuthUiState>(OAuthUiState.Loading)
+    private val _uiState = MutableStateFlow<OAuthUiState>(OAuthUiState.Idle)
     val uiState: StateFlow<OAuthUiState> = _uiState.asStateFlow()
+
+    init {
+        loadAccessToken()
+    }
 
     fun loadAccessToken() {
         if (_uiState.value is OAuthUiState.OAuthFlowStarted) return
         viewModelScope.launch {
-            _uiState.value = OAuthUiState.Loading
             runCatching {
                 tokenManager.getAccessToken()
             }.onSuccess { token ->
@@ -40,7 +43,6 @@ class OAuthViewModel(
 
     fun startOAuthFlow() {
         viewModelScope.launch {
-            _uiState.value = OAuthUiState.Loading
             runCatching {
                 val requestToken = oAuthService.getRequestToken().token
                 "${config.authorizeUrl}?oauth_token=$requestToken"
@@ -54,7 +56,6 @@ class OAuthViewModel(
 
     fun completeOAuthFlow(pinCode: String) {
         viewModelScope.launch {
-            _uiState.value = OAuthUiState.Loading
             runCatching {
                 val accessToken = oAuthService.getAccessToken(pinCode)
                 tokenManager.saveAccessToken(accessToken)
@@ -70,7 +71,6 @@ class OAuthViewModel(
 
     fun fetchUserData(accessToken: OAuth1AccessToken) {
         viewModelScope.launch {
-            _uiState.value = OAuthUiState.Loading
             runCatching {
                 oAuthService.fetchUserData(accessToken).name
             }.onSuccess { name ->
@@ -85,7 +85,7 @@ class OAuthViewModel(
      * UI状態を表現するsealed class
      */
     sealed class OAuthUiState {
-        data object Loading : OAuthUiState()
+        data object Idle : OAuthUiState()
         data object NoToken : OAuthUiState()
         data class TokenLoaded(val token: OAuth1AccessToken) : OAuthUiState()
         data class OAuthFlowStarted(val authUrl: String) : OAuthUiState()

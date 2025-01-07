@@ -54,7 +54,7 @@ fun OAuthScreen(
                 .padding(16.dp)
         ) {
             when (uiState) {
-                is OAuthUiState.Loading -> {
+                is OAuthUiState.Idle -> {
                     CircularProgressIndicator()
                 }
 

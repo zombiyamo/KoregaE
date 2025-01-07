@@ -22,7 +22,8 @@ val viewModelModule = module {
 
     viewModel {
         RssViewModel(
-            repository = get()
+            repository = get(),
+            userInfoManager = get()
         )
     }
 }
