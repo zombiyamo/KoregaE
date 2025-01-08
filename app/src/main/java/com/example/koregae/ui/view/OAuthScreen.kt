@@ -24,16 +24,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.koregae.ui.viewModel.OAuthUiState
 import com.example.koregae.ui.viewModel.OAuthViewModel
-import com.example.koregae.ui.viewModel.OAuthViewModel.OAuthUiState
 import com.example.koregae.utils.CustomTabsLauncher
 import org.koin.androidx.compose.get
-import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OAuthScreen(
-    oauthViewModel: OAuthViewModel = koinViewModel(),
+    oauthViewModel: OAuthViewModel = get(),
     customTabsLauncher: CustomTabsLauncher = get()
 ) {
     val context = LocalContext.current

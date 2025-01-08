@@ -32,7 +32,7 @@ class OAuthViewModelTest {
         oAuthService = FakeOAuthService()
         config = FakeOAuthConfig()
         oAuthTokenManager = FakeOAuthTokenManager()
-        viewModel = OAuthViewModel(oAuthService, config, oAuthTokenManager)
+        viewModel = OAuthViewModelImpl(oAuthService, config, oAuthTokenManager)
     }
 
     @Test
@@ -46,9 +46,9 @@ class OAuthViewModelTest {
         viewModel.startOAuthFlow()
 
 
-        val state = viewModel.uiState.first { it is OAuthViewModel.OAuthUiState.OAuthFlowStarted }
-        assert(state is OAuthViewModel.OAuthUiState.OAuthFlowStarted)
-        val resultUrl = (state as OAuthViewModel.OAuthUiState.OAuthFlowStarted).authUrl
+        val state = viewModel.uiState.first { it is OAuthUiState.OAuthFlowStarted }
+        assert(state is OAuthUiState.OAuthFlowStarted)
+        val resultUrl = (state as OAuthUiState.OAuthFlowStarted).authUrl
         assertEquals(expectedAuthUrl, resultUrl)
     }
 
@@ -61,10 +61,10 @@ class OAuthViewModelTest {
 
         viewModel.completeOAuthFlow(pinCode = "1234")
 
-        val state = viewModel.uiState.first { it is OAuthViewModel.OAuthUiState.TokenLoaded }
-        assert(state is OAuthViewModel.OAuthUiState.TokenLoaded)
+        val state = viewModel.uiState.first { it is OAuthUiState.TokenLoaded }
+        assert(state is OAuthUiState.TokenLoaded)
 
-        val resultToken = (state as OAuthViewModel.OAuthUiState.TokenLoaded).token
+        val resultToken = (state as OAuthUiState.TokenLoaded).token
         assertEquals(expectedToken.token, resultToken.token)
         assertEquals(expectedToken.tokenSecret, resultToken.tokenSecret)
         assertEquals(expectedToken.rawResponse, resultToken.rawResponse)
@@ -80,9 +80,9 @@ class OAuthViewModelTest {
         viewModel.fetchUserData(accessToken)
 
 
-        val state = viewModel.uiState.first { it is OAuthViewModel.OAuthUiState.UserDataLoaded }
-        assert(state is OAuthViewModel.OAuthUiState.UserDataLoaded)
-        val resultData = (state as OAuthViewModel.OAuthUiState.UserDataLoaded).userName
+        val state = viewModel.uiState.first { it is OAuthUiState.UserDataLoaded }
+        assert(state is OAuthUiState.UserDataLoaded)
+        val resultData = (state as OAuthUiState.UserDataLoaded).userName
         assertEquals(expectedUserData, resultData)
     }
 
@@ -94,9 +94,9 @@ class OAuthViewModelTest {
         viewModel.startOAuthFlow()
 
 
-        val state = viewModel.uiState.first { it is OAuthViewModel.OAuthUiState.Error }
-        assert(state is OAuthViewModel.OAuthUiState.Error)
-        val error = (state as OAuthViewModel.OAuthUiState.Error).throwable
+        val state = viewModel.uiState.first { it is OAuthUiState.Error }
+        assert(state is OAuthUiState.Error)
+        val error = (state as OAuthUiState.Error).throwable
         assertEquals("Failed to get Request Token", error.message)
     }
 
@@ -109,9 +109,9 @@ class OAuthViewModelTest {
         viewModel.fetchUserData(accessToken)
 
 
-        val state = viewModel.uiState.first { it is OAuthViewModel.OAuthUiState.Error }
-        assert(state is OAuthViewModel.OAuthUiState.Error)
-        val error = (state as OAuthViewModel.OAuthUiState.Error).throwable
+        val state = viewModel.uiState.first { it is OAuthUiState.Error }
+        assert(state is OAuthUiState.Error)
+        val error = (state as OAuthUiState.Error).throwable
         assertEquals("Failed to fetch user data", error.message)
     }
 }

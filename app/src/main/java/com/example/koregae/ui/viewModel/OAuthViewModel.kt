@@ -11,19 +11,36 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class OAuthViewModel(
+sealed class OAuthUiState {
+    data object Idle : OAuthUiState()
+    data object NoToken : OAuthUiState()
+    data class TokenLoaded(val token: OAuth1AccessToken) : OAuthUiState()
+    data class OAuthFlowStarted(val authUrl: String) : OAuthUiState()
+    data class UserDataLoaded(val userName: String) : OAuthUiState()
+    data class Error(val throwable: Throwable) : OAuthUiState()
+}
+
+interface OAuthViewModel {
+    val uiState: StateFlow<OAuthUiState>
+    fun loadAccessToken()
+    fun startOAuthFlow()
+    fun completeOAuthFlow(pinCode: String)
+    fun fetchUserData(accessToken: OAuth1AccessToken)
+}
+
+class OAuthViewModelImpl(
     private val oAuthService: IOAuthService,
     private val config: OAuthConfig,
     private val tokenManager: OAuthTokenManager
-) : ViewModel() {
+) : ViewModel(), OAuthViewModel {
     private val _uiState = MutableStateFlow<OAuthUiState>(OAuthUiState.Idle)
-    val uiState: StateFlow<OAuthUiState> = _uiState.asStateFlow()
+    override val uiState: StateFlow<OAuthUiState> = _uiState.asStateFlow()
 
     init {
         loadAccessToken()
     }
 
-    fun loadAccessToken() {
+    override fun loadAccessToken() {
         if (_uiState.value is OAuthUiState.OAuthFlowStarted) return
         viewModelScope.launch {
             runCatching {
@@ -41,7 +58,7 @@ class OAuthViewModel(
         }
     }
 
-    fun startOAuthFlow() {
+    override fun startOAuthFlow() {
         viewModelScope.launch {
             runCatching {
                 val requestToken = oAuthService.getRequestToken().token
@@ -54,7 +71,7 @@ class OAuthViewModel(
         }
     }
 
-    fun completeOAuthFlow(pinCode: String) {
+    override fun completeOAuthFlow(pinCode: String) {
         viewModelScope.launch {
             runCatching {
                 val accessToken = oAuthService.getAccessToken(pinCode)
@@ -69,7 +86,7 @@ class OAuthViewModel(
         }
     }
 
-    fun fetchUserData(accessToken: OAuth1AccessToken) {
+    override fun fetchUserData(accessToken: OAuth1AccessToken) {
         viewModelScope.launch {
             runCatching {
                 oAuthService.fetchUserData(accessToken).name
@@ -79,17 +96,5 @@ class OAuthViewModel(
                 _uiState.value = OAuthUiState.Error(it)
             }
         }
-    }
-
-    /**
-     * UI状態を表現するsealed class
-     */
-    sealed class OAuthUiState {
-        data object Idle : OAuthUiState()
-        data object NoToken : OAuthUiState()
-        data class TokenLoaded(val token: OAuth1AccessToken) : OAuthUiState()
-        data class OAuthFlowStarted(val authUrl: String) : OAuthUiState()
-        data class UserDataLoaded(val userName: String) : OAuthUiState()
-        data class Error(val throwable: Throwable) : OAuthUiState()
     }
 }

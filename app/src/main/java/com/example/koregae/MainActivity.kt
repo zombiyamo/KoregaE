@@ -10,15 +10,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.koregae.ui.view.OAuthScreen
 import com.example.koregae.ui.view.RssScreen
+import com.example.koregae.ui.viewModel.OAuthUiState
 import com.example.koregae.ui.viewModel.OAuthViewModel
-import com.example.koregae.ui.viewModel.OAuthViewModel.OAuthUiState
 import com.example.koregae.utils.CustomTabsLauncher
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
-    private val oauthViewModel: OAuthViewModel by viewModel()
+    private val oauthViewModel: OAuthViewModel by inject()
     private val customTabsLauncher: CustomTabsLauncher by inject { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

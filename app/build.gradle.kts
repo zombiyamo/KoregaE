@@ -98,6 +98,7 @@ dependencies {
 
     // Jetpack DataStore
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.ui.test.junit4.android)
 
     // JUnit5テスト関連
     testImplementation(libs.junit.jupiter.api)
