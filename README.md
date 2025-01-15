@@ -1,6 +1,6 @@
-# KoregaE
+# Sample Hatena API OAuth App
 
-KoregaEは、Kotlin、Android Jetpack、およびKtorを使用してOAuth認証を行い、認証したユーザのはてなブックマークのRSSフィードを表示するAndroidアプリケーションです。
+Kotlin、Android Jetpack、およびKtorを使用してOAuth認証を行い、認証したユーザのはてなブックマークのRSSフィードを表示するAndroidアプリケーションです。
 
 ## 機能
 
